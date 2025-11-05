@@ -1,14 +1,29 @@
 import type { UrlDataType } from '@/types/general';
 
-async function uploadImage(file: File, urlData: UrlDataType) {
+interface Files {
+  fullSize: File,
+  thumb: File
+}
+
+async function uploadImage(files: Files, urlData: UrlDataType) {
+  console.log({ urlData })
   try {
-    return await fetch(urlData.uploadUrl, {
-      method: 'PUT',
-      body: file,
-      headers: {
-        'Content-Type': urlData.contentType
-      }
-    })
+    return Promise.all([
+      fetch(urlData.uploadUrls.fullSize, {
+        method: 'PUT',
+        body: files.fullSize,
+        headers: {
+          'Content-Type': urlData.contentType
+        }
+      }),
+      fetch(urlData.uploadUrls.thumb, {
+        method: 'PUT',
+        body: files.thumb,
+        headers: {
+          'Content-Type': urlData.contentType
+        }
+      }),
+    ])
   } catch (error) {
     console.error(error)
   }

@@ -7,6 +7,7 @@ interface Params {
 
 async function getUrls(files: Params[]) {
   try {
+    console.log(files)
     const response = await fetch(import.meta.env.VITE_WORKER_URL, {
       method: 'POST',
       headers: {

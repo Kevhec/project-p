@@ -1,4 +1,7 @@
+import { Button } from '@/components/ui/button';
+import { auth } from '@/config/firebase';
 import { useAuth } from '@/context/authContext';
+import { signOut } from 'firebase/auth';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 export default function MainLayout() {
@@ -18,8 +21,13 @@ export default function MainLayout() {
   }
 
   return (
-    <div className='flex min-h-screen min-w-screen mx-auto bg-linear-to-tr from-white to-mimipink '>
+    <div className='relative flex flex-col justify-between min-h-screen w-full mx-auto bg-[url(/images/flower-pattern.png)] bg-repeat-y bg-contain'>
+      <div className='absolute inset-0 bg-linear-to-r from-white/80 to-white to-70%' />
+      <Button className='relative z-50' onClick={() => signOut(auth)}>Salir</Button>
       <Outlet />
+      <div className='fixed bottom-0 w-full bg-white py-2'>
+        <p className='text-center text-sm font-diphylleia'>Hecho con ♥️ para nosotros</p>
+      </div>
     </div>
   )
 }
