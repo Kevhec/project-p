@@ -22,7 +22,7 @@ const CustomDayButton = memo(function CustomDayButton({
   const isTabletOrMobile = useMediaQuery({ query: "(max-width: 900px)" })
 
   const classes = cn(
-    "relative w-full h-full rounded-md border focus:bg-[#E16696] text-white flex px-2 py-1 bg-[#931C4B] transition-colors",
+    "relative w-full text-sm md:text-base h-full rounded-md border focus:bg-[#E16696] text-white flex px-2 py-1 bg-[#931C4B] transition-colors",
     {
       "bg-[#A85D7A] hover:bg-[#C18BA0]": modifiers.outside,
       "hover:bg-[#C42765]": !modifiers.outside,
@@ -43,7 +43,7 @@ const CustomDayButton = memo(function CustomDayButton({
             {
               "w-5 h-5 p-0 translate-none left-auto right-1 bottom-1 text-black":
                 isTabletOrMobile,
-              "w-10 right-0 translate-x-1.5": !isTabletOrMobile && thumbs.length === 2,
+              "w-10 left-none right-0 -translate-x-2.5": !isTabletOrMobile && thumbs.length === 2,
               "w-6 right-0 translate-x-1.5": !isTabletOrMobile && thumbs.length === 1,
             }
           )}

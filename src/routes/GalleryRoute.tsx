@@ -9,11 +9,13 @@ import { cn, getSpan } from "@/lib/utils"
 import type { DocumentDataType } from "@/types/general"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
+import { useMediaQuery } from 'react-responsive'
 
 export default function GalleryRoute() {
   const [activeImage, setActiveImage] = useState<DocumentDataType | null>(null)
   const { monthData, getMonthData } = usePictures()
   const { day } = useParams()
+  const isMobile = useMediaQuery({ query: '(max-width: 767px)' })
 
   const currentDayImages = useMemo(() => {
     if (!day) return []
@@ -46,7 +48,9 @@ export default function GalleryRoute() {
       <div className="relative mx-auto w-full max-w-5xl grid grid-cols-2 auto-rows-[minmax(auto,200px)] md:grid-cols-4 gap-2 md:gap-4">
         {currentDayImages.map((file, i) => {
           const bentoVariant = getSpan(i)
-          const containerClasses = cn("w-full", bentoVariant)
+          const containerClasses = cn("w-full", {
+            [bentoVariant]: !isMobile
+          })
           const fullSizeUrl = file.urls.fullSize
           const isActive = activeImage?.urls?.fullSize === file?.urls?.fullSize
 
