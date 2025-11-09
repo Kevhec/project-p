@@ -182,7 +182,7 @@ export default function CalendarRoute() {
     handleLoading(true)
   }, [selectedMonth, selectedYear, handleLoading])
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, open, getInputProps, isDragActive } = useDropzone({
     onDrop,
     noClick: true,
     noKeyboard: true,
@@ -271,156 +271,172 @@ export default function CalendarRoute() {
                   </SelectContent>
                 </Select>
               </div>
-              {fields.length > 0 && (
-                <ScrollArea className="md:h-[400px] md:p-4 bg-white rounded-md">
+                <ScrollArea
+                  className={cn(
+                    "md:h-[400px] md:p-4 bg-white rounded-md border transition-all py-4",
+                    {
+                      "md:h-fit": fields.length === 0
+                    }
+                  )}
+                >
                   <div>
                     <h2 className="font-diphylleia mb-2 text-center text-lg">
-                      Cargar recuerdos ♥️
+                      Nuevos recuerdos ♥️
                     </h2>
-                    <Form {...form}>
-                      <form
-                        onSubmit={form.handleSubmit(onSubmit)}
-                        id="upload-form"
-                        className="space-y-4"
-                      >
-                        {fields.map((field, index) => {
-                          const itemState = uploadState[index]
-                          const imageUrl = URL.createObjectURL(field.file)
-
-                          return (
-                            <Card
-                              key={field.id}
-                              className="relative flex-row gap-2 py-4"
-                            >
-                              {itemState && (
-                                <UploadStateOverlay
-                                  state={itemState}
-                                  image={imageUrl}
-                                />
-                              )}
-                              <CardHeader className="pl-4 py-0 pr-0 container-normal flex flex-col">
-                                <CardAction className="absolute right-0.5 top-0.5">
-                                  <Button
-                                    variant="ghost"
-                                    className="w-4 p-1 h-auto aspect-square"
-                                    onClick={() => remove(index)}
-                                    disabled={itemState === "pending"}
-                                  >
-                                    <X />
-                                    <span className="sr-only">Eliminar</span>
-                                  </Button>
-                                </CardAction>
-                                <div className="w-min space-y-0.5">
-                                  <p
-                                    className={cn(
-                                      "font-diphylleia text-sm text-center",
-                                      {
-                                        "text-rose-800":
-                                          index + 1 > MAX_FILES_PER_UPLOAD,
-                                      }
-                                    )}
-                                  >
-                                    {index + 1} / 10
-                                  </p>
-                                  <figure className="mx-auto w-14 aspect-square">
-                                    <img
-                                      src={imageUrl}
-                                      alt={field.name}
-                                      width={50}
-                                      height={50}
-                                      className="object-cover rounded-sm aspect-square w-full"
-                                    />
-                                  </figure>
-                                </div>
-                              </CardHeader>
-                              <CardContent className="flex items-center gap-2 relative px-0 flex-col grow pr-6">
-                                <FormField
-                                  control={form.control}
-                                  name={`images.${index}.name`}
-                                  render={({ field }) => (
-                                    <FormItem className="gap-0.5 w-full">
-                                      <FormLabel className="text-xs sr-only">
-                                        Nombre
-                                      </FormLabel>
-                                      <FormControl>
-                                        <Input
-                                          placeholder="Recuerdo 1"
-                                          className="text-xs!"
-                                          {...field}
-                                        />
-                                      </FormControl>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                                <FormField
-                                  control={form.control}
-                                  name={`images.${index}.date`}
-                                  render={({ field }) => (
-                                    <FormItem className="flex flex-col gap-0.5 w-full">
-                                      <FormLabel className="text-xs sr-only">
-                                        Fecha
-                                      </FormLabel>
-                                      <Popover>
-                                        <PopoverTrigger asChild>
-                                          <FormControl>
-                                            <Button
-                                              variant={"outline"}
-                                              className={cn(
-                                                "w-full pl-3 text-left font-normal text-xs",
-                                                !field.value &&
-                                                  "text-muted-foreground"
-                                              )}
-                                            >
-                                              {field.value ? (
-                                                format(field.value, "PPP", {
-                                                  locale: es,
-                                                })
-                                              ) : (
-                                                <span>Escoge una fecha</span>
-                                              )}
-                                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                                            </Button>
-                                          </FormControl>
-                                        </PopoverTrigger>
-                                        <PopoverContent
-                                          className="w-auto p-0"
-                                          align="start"
-                                        >
-                                          <Calendar
-                                            mode="single"
-                                            selected={field.value}
-                                            onSelect={field.onChange}
-                                            locale={es}
-                                            captionLayout="dropdown"
-                                          />
-                                        </PopoverContent>
-                                      </Popover>
-                                      <FormMessage />
-                                    </FormItem>
-                                  )}
-                                />
-                              </CardContent>
-                            </Card>
-                          )
-                        })}
-                        <Button
-                          type="submit"
-                          className="w-full"
-                          disabled={loading}
+                    <Button
+                      className={cn(
+                        'bg-[#931C4B] hover:bg-[#C42765] text-white font-diphylleia w-10/12 mx-auto block',
+                        { "mb-4": fields.length > 0 }
+                      )}
+                      onClick={open}
+                    >
+                      Abrir galería
+                    </Button>
+                    {fields.length > 0 && (
+                      <Form {...form}>
+                        <form
+                          onSubmit={form.handleSubmit(onSubmit)}
+                          id="upload-form"
+                          className="space-y-4"
                         >
-                          {!loading &&
-                          Object.values(uploadState).some(
-                            (value) => value === "rejected"
-                          )
-                            ? "Intentar de nuevo"
-                            : "Subir recuerdos"}
-                        </Button>
-                      </form>
-                    </Form>
+                          {fields.map((field, index) => {
+                            const itemState = uploadState[index]
+                            const imageUrl = URL.createObjectURL(field.file)
+
+                            return (
+                              <Card
+                                key={field.id}
+                                className="relative flex-row gap-2 py-4"
+                              >
+                                {itemState && (
+                                  <UploadStateOverlay
+                                    state={itemState}
+                                    image={imageUrl}
+                                  />
+                                )}
+                                <CardHeader className="pl-4 py-0 pr-0 container-normal flex flex-col">
+                                  <CardAction className="absolute right-0.5 top-0.5">
+                                    <Button
+                                      variant="ghost"
+                                      className="w-4 p-1 h-auto aspect-square"
+                                      onClick={() => remove(index)}
+                                      disabled={itemState === "pending"}
+                                    >
+                                      <X />
+                                      <span className="sr-only">Eliminar</span>
+                                    </Button>
+                                  </CardAction>
+                                  <div className="w-min space-y-0.5">
+                                    <p
+                                      className={cn(
+                                        "font-diphylleia text-sm text-center",
+                                        {
+                                          "text-rose-800":
+                                            index + 1 > MAX_FILES_PER_UPLOAD,
+                                        }
+                                      )}
+                                    >
+                                      {index + 1} / 10
+                                    </p>
+                                    <figure className="mx-auto w-14 aspect-square">
+                                      <img
+                                        src={imageUrl}
+                                        alt={field.name}
+                                        width={50}
+                                        height={50}
+                                        className="object-cover rounded-sm aspect-square w-full"
+                                      />
+                                    </figure>
+                                  </div>
+                                </CardHeader>
+                                <CardContent className="flex items-center gap-2 relative px-0 flex-col grow pr-6">
+                                  <FormField
+                                    control={form.control}
+                                    name={`images.${index}.name`}
+                                    render={({ field }) => (
+                                      <FormItem className="gap-0.5 w-full">
+                                        <FormLabel className="text-xs sr-only">
+                                          Nombre
+                                        </FormLabel>
+                                        <FormControl>
+                                          <Input
+                                            placeholder="Recuerdo 1"
+                                            className="text-xs!"
+                                            {...field}
+                                          />
+                                        </FormControl>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                  <FormField
+                                    control={form.control}
+                                    name={`images.${index}.date`}
+                                    render={({ field }) => (
+                                      <FormItem className="flex flex-col gap-0.5 w-full">
+                                        <FormLabel className="text-xs sr-only">
+                                          Fecha
+                                        </FormLabel>
+                                        <Popover>
+                                          <PopoverTrigger asChild>
+                                            <FormControl>
+                                              <Button
+                                                variant={"outline"}
+                                                className={cn(
+                                                  "w-full pl-3 text-left font-normal text-xs",
+                                                  !field.value &&
+                                                    "text-muted-foreground"
+                                                )}
+                                              >
+                                                {field.value ? (
+                                                  format(field.value, "PPP", {
+                                                    locale: es,
+                                                  })
+                                                ) : (
+                                                  <span>Escoge una fecha</span>
+                                                )}
+                                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                                              </Button>
+                                            </FormControl>
+                                          </PopoverTrigger>
+                                          <PopoverContent
+                                            className="w-auto p-0"
+                                            align="start"
+                                          >
+                                            <Calendar
+                                              mode="single"
+                                              selected={field.value}
+                                              onSelect={field.onChange}
+                                              locale={es}
+                                              captionLayout="dropdown"
+                                            />
+                                          </PopoverContent>
+                                        </Popover>
+                                        <FormMessage />
+                                      </FormItem>
+                                    )}
+                                  />
+                                </CardContent>
+                              </Card>
+                            )
+                          })}
+                          <Button
+                            type="submit"
+                            className="w-full"
+                            disabled={loading}
+                          >
+                            {!loading &&
+                            Object.values(uploadState).some(
+                              (value) => value === "rejected"
+                            )
+                              ? "Intentar de nuevo"
+                              : "Subir recuerdos"}
+                          </Button>
+                        </form>
+                      </Form>
+                    )}
                   </div>
                 </ScrollArea>
-              )}
             </div>
             <div className="relative h-fit">
               {monthDataLoading && (

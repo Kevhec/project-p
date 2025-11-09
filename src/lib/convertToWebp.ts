@@ -14,7 +14,7 @@ function convertToWebp(file: File, options: Options = { quality: 0.8 }): Promise
       URL.revokeObjectURL(url)
 
       const canvas = document.createElement('canvas');
-      
+
       if (!maxWidth || img.width <= maxWidth) {
         canvas.width = img.width;
         canvas.height = img.height;

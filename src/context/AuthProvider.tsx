@@ -13,9 +13,9 @@ import { getAuth, onAuthStateChanged, signOut } from "firebase/auth"
 import { toast } from 'sonner';
 
 const ALLOWED_USERS = [
-  {email: "pjmnzcvs@gmail.com", myPrincess: true},
-  {email: "kevhec.dev@gmail.com", myPrincess: false},
-  {email: "kevinalejandrohenca@gmail.com", myPrincess: false},
+  { email: "pjmnzcvs@gmail.com", myPrincess: true },
+  { email: "kevhec.dev@gmail.com", myPrincess: false },
+  { email: "kevinalejandrohenca@gmail.com", myPrincess: false },
 ]
 
 function AuthProvider({ children }: PropsWithChildren) {

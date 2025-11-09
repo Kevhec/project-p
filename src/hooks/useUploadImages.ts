@@ -27,9 +27,6 @@ function useUploadImages() {
         const fullSize = await convertToWebp(file);
         const thumb = await convertToWebp(file, { maxWidth: 100, suffix: 'thumb' });
 
-        console.log(fullSize)
-        console.log(thumb)
-
         // Upload to storage
         await uploadImage(
           {
