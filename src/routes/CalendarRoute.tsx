@@ -42,7 +42,7 @@ import { Card, CardAction, CardContent, CardHeader } from "@/components/ui/card"
 import useUploadImages from "@/hooks/useUploadImages"
 import { usePictures } from "@/context/picturesContext"
 import CustomDayButton from "@/components/internal/CustomDayButton"
-import type { DayButtonProps } from "react-day-picker"
+import type { DayButtonProps, Modifiers } from "react-day-picker"
 import { useNavigate } from "react-router"
 import { Spinner } from "@/components/ui/spinner"
 
@@ -163,13 +163,18 @@ export default function CalendarRoute() {
     return dateMapping
   }, [monthData])
 
-  const handleDayClick = (date: Date) => {
-    const key = format(date, DATE_FORMAT)
+  const handleDayClick = (date: Date, modifiers: Modifiers) => {
+    const thumbsKey = format(date, DATE_FORMAT)
+    const monthKey = format(date, 'MM-yyyy')
 
-    getMonthData(date)
+    // TODO: Verify if this is needed
+    /* getMonthData(date) */
 
-    if (thumbsByDay[key]?.length > 0) {
-      navigate(key, { viewTransition: true })
+    if (monthData.length > 0 && !modifiers.outside) {
+      const dayHasImages = thumbsByDay[thumbsKey]?.length > 0
+      navigate(`${monthKey}${dayHasImages ? `#${thumbsKey}` : ''}`, {
+        state: { day: dayHasImages ? thumbsKey : undefined }
+      })
     }
   }
 

@@ -27,7 +27,7 @@ function App() {
                 }
               />
               <Route
-                path="/calendar/:day"
+                path="/calendar/:month"
                 element={
                   <ProtectedRoute>
                     <GalleryRoute />
