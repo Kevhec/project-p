@@ -212,7 +212,7 @@ export default function CalendarRoute() {
         />
       </div>
       <input {...getInputProps()} />
-      <ScrollArea className="h-screen max-w-screen overflow-hidden pb-10">
+      <ScrollArea className="h-dvh max-w-screen overflow-hidden pb-10">
         <div className="w-full p-4 pt-10 md:px-20 md:pt-20 md:max-w-6xl mx-auto">
           <h1 className="font-great-vibes text-7xl text-center">
             Nuestros días

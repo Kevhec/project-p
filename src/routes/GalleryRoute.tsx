@@ -42,7 +42,7 @@ export default function GalleryRoute() {
   }, [month, monthData, getMonthData])
 
   return (
-    <ScrollArea className="h-screen w-full p-4">
+    <ScrollArea className="h-dvh w-full p-4">
       <ScrollToHash />
       <div className="relative w-full max-w-5xl mx-auto">
         <Button
@@ -110,7 +110,7 @@ export default function GalleryRoute() {
             <>
               <motion.div
                 key="backdrop"
-                className="fixed inset-0 bg-black/70 z-40"
+                className="fixed min-h-dvh inset-0 bg-black/70 z-40"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}

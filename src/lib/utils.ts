@@ -16,11 +16,11 @@ export function getSpan(index: number) {
     case 2:
       return "row-span-2"
     case 3:
-      return "col-span-2"
+      return ""
     case 4:
       return ""
     case 5:
-      return ""
+      return "col-span-2"
     case 6:
       return "col-span-2"
     case 7:
